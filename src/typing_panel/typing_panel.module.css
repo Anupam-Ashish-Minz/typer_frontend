@@ -1,0 +1,12 @@
+.textStyles {
+  background-color: #111;
+  color: #fff;
+  width: 100%;
+}
+
+.displayText {
+    font-size: 28px;
+    width: 100%;
+    height: 200px;
+    display: block;
+}
