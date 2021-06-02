@@ -2,31 +2,50 @@ import { useState, useEffect } from 'react';
 import styles from './typing_panel.module.css';
 
 const TypingPanel = () => {
-  const [fullText, setFullText] = useState<string>("the quick brown fox jumps over the lazy dog");
+  const fullText = "the quick brown fox jumps over the lazy dog";
+
   const [currentText, setCurrentText] = useState<string>("");
-
-  const [cPos, setCPos] = useState<number>(0);
-
-  const [prevWords, setPrevWords] = useState<string>("");
-  const [currentWord, setCurrentWord] = useState<string>("");
-  const [nextWords, setNextWords] = useState<string>("");
+  const [cPos, setCPos] = useState(0);
+  const [prevWords, setPrevWords] = useState("");
+  const [currentWord, setCurrentWord] = useState("");
+  const [nextWords, setNextWords] = useState("");
+  const [startTime, setStartTime] = useState<number>();
+  const [isFinnished, setIsFinnished] = useState(false);
+  const [speed, setSpeed] = useState<number>();
 
   useEffect(()=>{
   }, [])
 
   useEffect(()=>{
     setCPos(currentText.length);
+    // the first render happens when the page first renderes, 
+    // we don't want start time timer before the user has stated typing
+    if (startTime === undefined) setStartTime(0);
+    if (startTime === 0) setStartTime(Date.now());
 
     const wordEnd = fullText.indexOf(" ", cPos);
 
+    if (currentText.length === 0) {
+      setStartTime(0);
+    }
     if (cPos < fullText.length && wordEnd > 0) { 
       setPrevWords(fullText.substring(0, cPos));
       setCurrentWord(fullText.substring(cPos, wordEnd));
       setNextWords(fullText.substring(wordEnd));
+      setIsFinnished(false);
     } else {
       setPrevWords(fullText.substring(0));
       setCurrentWord("");
       setNextWords("");
+
+      if (!isFinnished) {
+        setIsFinnished(true);
+        const endTime = Date.now();
+        const textWordCount: number = Math.ceil(fullText.length / 5);
+        const totalTimeMin: number = startTime ? (endTime - startTime) / (1000 * 60) : 0;
+        const speed: number = textWordCount / totalTimeMin; 
+        setSpeed(speed);
+      }
     }
 
     let elem = document.getElementById("currentWord")
@@ -53,15 +72,17 @@ const TypingPanel = () => {
             <span id="currentWord">{currentWord}</span>
             <span id="nextWords">{nextWords}</span>
           </div>
-
-          <div id="currentText">{currentText}</div>
-        </div>
-        <div>
-          <textarea rows={10} cols={50} className={styles.textStyles}
-            onChange={(e: any)=>setCurrentText(e.target.value)}
-          > </textarea>
+          <div>
+            <input type="text" 
+              onChange={(e: any)=>setCurrentText(e.target.value)}
+              className={styles.inputTextStyles}
+              />
+          </div>
         </div>
       </form>
+      <div>
+      Your speed is {speed} WPM
+      </div>
     </div>
   );
 };

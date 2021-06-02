@@ -1,12 +1,16 @@
-.textStyles {
+.inputTextStyles {
   background-color: #111;
   color: #fff;
-  width: 100%;
+  width: 80%;
+  height: 200px;
+  font-size: 28px;
+  outline: none;
+  border: none;
 }
 
 .displayText {
     font-size: 28px;
-    width: 100%;
+    width: 80%;
     height: 200px;
     display: block;
 }
