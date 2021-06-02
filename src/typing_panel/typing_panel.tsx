@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './typing_panel.module.css';
 
 const TypingPanel = () => {
-  const fullText = "the quick brown fox jumps over the lazy dog";
+  const [fullText, setFullText] = useState("the quick brown fox jumps over the lazy dog");
 
   const [currentText, setCurrentText] = useState<string>("");
   const [cPos, setCPos] = useState(0);
